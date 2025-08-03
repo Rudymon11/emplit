@@ -4,7 +4,12 @@ import { Search, MapPin, Calendar, Building2, Briefcase, ExternalLink, Filter, L
 import { format, parseISO } from 'date-fns';
 import './App.css';
 
+// Use environment variable or fallback to localhost
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+
+// Configure axios defaults
+axios.defaults.timeout = 10000;
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 function App() {
   const [jobs, setJobs] = useState([]);
