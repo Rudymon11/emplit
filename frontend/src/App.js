@@ -35,6 +35,8 @@ function App() {
   const fetchJobs = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
       const params = new URLSearchParams();
       
       if (searchTerm) params.append('search', searchTerm);
@@ -43,13 +45,31 @@ function App() {
       params.append('page', currentPage.toString());
       params.append('limit', '10');
       
+      console.log('Fetching jobs from:', `${API_BASE_URL}/api/jobs?${params.toString()}`);
+      
       const response = await axios.get(`${API_BASE_URL}/api/jobs?${params.toString()}`);
-      setJobs(response.data.jobs || []);
-      setPagination(response.data.pagination || {});
-      setError(null);
+      
+      if (response.data && response.data.jobs) {
+        setJobs(response.data.jobs);
+        setPagination(response.data.pagination || {});
+      } else {
+        setJobs([]);
+        setPagination({});
+      }
+      
+      console.log('Fetched jobs:', response.data);
+      
     } catch (err) {
       console.error('Error fetching jobs:', err);
-      setError('Failed to fetch jobs. Please try again later.');
+      if (err.code === 'ECONNREFUSED' || err.message.includes('Network Error')) {
+        setError('Cannot connect to server. Please check if the backend is running.');
+      } else if (err.response) {
+        setError(`Server error: ${err.response.status} - ${err.response.data?.detail || 'Unknown error'}`);
+      } else {
+        setError('Failed to fetch jobs. Please try again later.');
+      }
+      setJobs([]);
+      setPagination({});
     } finally {
       setLoading(false);
     }
