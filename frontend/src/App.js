@@ -14,27 +14,33 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedUniversity, setSelectedUniversity] = useState('');
   const [stats, setStats] = useState(null);
+  const [pagination, setPagination] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showJobModal, setShowJobModal] = useState(false);
 
   const categories = ['Research', 'Teaching', 'PhD', 'Fellowship', 'Technical', 'Administrative', 'Internship'];
 
   useEffect(() => {
     fetchJobs();
     fetchStats();
-  }, [searchTerm, selectedCategory, selectedUniversity]);
+  }, [searchTerm, selectedCategory, selectedUniversity, currentPage]);
 
   const fetchJobs = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
-      params.append('location', 'London');
       
       if (searchTerm) params.append('search', searchTerm);
       if (selectedCategory) params.append('category', selectedCategory);
       if (selectedUniversity) params.append('university', selectedUniversity);
+      params.append('page', currentPage.toString());
+      params.append('limit', '10');
       
       const response = await axios.get(`${API_BASE_URL}/api/jobs?${params.toString()}`);
-      setJobs(response.data);
+      setJobs(response.data.jobs || []);
+      setPagination(response.data.pagination || {});
       setError(null);
     } catch (err) {
       console.error('Error fetching jobs:', err);
