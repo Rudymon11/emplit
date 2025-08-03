@@ -331,8 +331,19 @@ function App() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-semibold text-foreground">
-                    {jobs.length} Job{jobs.length !== 1 ? 's' : ''} Found
+                    {pagination.total_count || 0} Job{(pagination.total_count || 0) !== 1 ? 's' : ''} Found
+                    {searchTerm || selectedCategory || selectedUniversity ? (
+                      <button
+                        onClick={resetFilters}
+                        className="ml-4 text-sm text-primary hover:text-primary/80 underline"
+                      >
+                        Clear Filters
+                      </button>
+                    ) : null}
                   </h2>
+                  <div className="text-sm text-muted-foreground">
+                    Page {pagination.current_page || 1} of {pagination.total_pages || 1}
+                  </div>
                 </div>
 
                 {jobs.map((job) => (
@@ -379,18 +390,71 @@ function App() {
                       <div className="text-sm text-muted-foreground">
                         Posted: {formatDate(job.date_added)}
                       </div>
-                      <a
-                        href={job.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                      >
-                        View Details
-                        <ExternalLink className="w-4 h-4 ml-2" />
-                      </a>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => openJobModal(job)}
+                          className="inline-flex items-center px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
+                        >
+                          View Full Details
+                        </button>
+                        <a
+                          href={job.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                        >
+                          Apply Now
+                          <ExternalLink className="w-4 h-4 ml-2" />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 ))}
+
+                {/* Pagination */}
+                {pagination.total_pages > 1 && (
+                  <div className="flex items-center justify-center space-x-2 mt-8">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={!pagination.has_prev}
+                      className="px-4 py-2 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Previous
+                    </button>
+                    
+                    {/* Page numbers */}
+                    {Array.from({ length: Math.min(5, pagination.total_pages) }, (_, i) => {
+                      const pageNum = Math.max(1, Math.min(
+                        pagination.current_page - 2 + i,
+                        pagination.total_pages - 4 + i
+                      ));
+                      
+                      if (pageNum > pagination.total_pages) return null;
+                      
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                            pageNum === pagination.current_page
+                              ? 'bg-primary text-primary-foreground'
+                              : 'text-foreground bg-card border border-border hover:bg-accent'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                    
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={!pagination.has_next}
+                      className="px-4 py-2 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
