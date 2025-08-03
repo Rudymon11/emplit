@@ -77,10 +77,13 @@ function App() {
 
   const fetchStats = async () => {
     try {
+      console.log('Fetching stats from:', `${API_BASE_URL}/api/stats`);
       const response = await axios.get(`${API_BASE_URL}/api/stats`);
       setStats(response.data);
+      console.log('Fetched stats:', response.data);
     } catch (err) {
       console.error('Error fetching stats:', err);
+      // Don't show error for stats, just log it
     }
   };
 
