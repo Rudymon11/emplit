@@ -84,11 +84,15 @@ async def get_jobs(
             query["university"] = {"$regex": university, "$options": "i"}
             
         if search:
+            search_regex = {"$regex": search, "$options": "i"}
             query["$or"] = [
-                {"title": {"$regex": search, "$options": "i"}},
-                {"description": {"$regex": search, "$options": "i"}},
-                {"summary": {"$regex": search, "$options": "i"}}
+                {"title": search_regex},
+                {"description": search_regex},
+                {"university": search_regex}
             ]
+            # Only include summary in search if it exists and is not null
+            if await db.jobs.count_documents({"summary": {"$ne": None, "$exists": True}}) > 0:
+                query["$or"].append({"summary": search_regex})
         
         # Get total count for pagination
         total_count = await db.jobs.count_documents(query)
