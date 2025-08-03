@@ -81,8 +81,104 @@ function App() {
     return colors[category] || colors['General'];
   };
 
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= (pagination.total_pages || 1)) {
+      setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const openJobModal = (job) => {
+    setSelectedJob(job);
+    setShowJobModal(true);
+  };
+
+  const closeJobModal = () => {
+    setSelectedJob(null);
+    setShowJobModal(false);
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setSelectedCategory('');
+    setSelectedUniversity('');
+    setCurrentPage(1);
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Job Details Modal */}
+      {showJobModal && selectedJob && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-card rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-border">
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-foreground mb-2">{selectedJob.title}</h2>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center">
+                      <Building2 className="w-4 h-4 mr-1" />
+                      <span>{selectedJob.university}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      <span>{selectedJob.location}</span>
+                    </div>
+                    {selectedJob.deadline && (
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        <span>Deadline: {formatDate(selectedJob.deadline)}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <button
+                  onClick={closeJobModal}
+                  className="ml-4 p-2 hover:bg-accent rounded-lg transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="mb-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(selectedJob.category)}`}>
+                  {selectedJob.category}
+                </span>
+              </div>
+              
+              {selectedJob.summary && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Summary</h3>
+                  <p className="text-foreground leading-relaxed">{selectedJob.summary}</p>
+                </div>
+              )}
+              
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-foreground mb-3">Full Description</h3>
+                <div className="prose prose-sm max-w-none text-foreground">
+                  <p className="leading-relaxed whitespace-pre-line">{selectedJob.description}</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-between items-center pt-4 border-t border-border">
+                <div className="text-sm text-muted-foreground">
+                  Posted: {formatDate(selectedJob.date_added)}
+                </div>
+                <a
+                  href={selectedJob.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  Apply Now
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="bg-card border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
