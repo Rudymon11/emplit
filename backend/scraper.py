@@ -208,63 +208,94 @@ class LondonAcademicScraper:
         return jobs
 
     async def create_sample_london_jobs(self, source: Dict) -> List[Dict]:
-        """Create sample jobs for London universities"""
-        sample_jobs = [
+        """Create sample professorial jobs for UK universities"""
+        professorial_jobs = [
             {
-                "title": "Research Associate in Machine Learning",
+                "title": "Professor of Machine Learning and AI",
                 "university": source["name"],
-                "description": "We are seeking a Research Associate to join our AI research team focusing on machine learning applications in healthcare. The role involves developing novel algorithms, publishing research papers, and collaborating with clinical partners. Requirements include PhD in Computer Science or related field, experience with Python/PyTorch, and strong publication record.",
-                "url": f"{source['url']}/research-associate-ml-{uuid.uuid4().hex[:8]}",
+                "description": "We are seeking an exceptional Professor to lead our Machine Learning and Artificial Intelligence research group. The successful candidate will have a distinguished record of research in machine learning, deep learning, or related AI fields, with significant publications in top-tier venues. The role involves leading a research team, securing major funding, teaching at undergraduate and postgraduate levels, and establishing international collaborations. We offer a competitive salary, comprehensive benefits, sabbatical opportunities, and excellent research facilities including state-of-the-art computing resources.",
+                "url": f"{source['url']}/professor-ml-ai-{uuid.uuid4().hex[:8]}",
                 "location": source["location"],
-                "deadline": "2024-04-15",
-                "category": "Research"
+                "deadline": "2024-06-15",
+                "category": "Teaching"
             },
             {
-                "title": "Postdoctoral Fellow - Climate Science",
+                "title": "Associate Professor in Climate Science",
                 "university": source["name"],
-                "description": "Exciting opportunity for a Postdoctoral Fellow to join our climate research group. The position involves analyzing climate data, developing predictive models, and contributing to international climate assessments. The successful candidate will have a PhD in Climate Science, Atmospheric Physics, or related field.",
-                "url": f"{source['url']}/postdoc-climate-{uuid.uuid4().hex[:8]}",
+                "description": "Applications are invited for an Associate Professor position in Climate Science within our Environmental Science Department. The ideal candidate will have expertise in climate modeling, atmospheric physics, or oceanography, with a strong publication record and experience in grant acquisition. Responsibilities include conducting cutting-edge research, supervising PhD students, teaching undergraduate and graduate courses, and contributing to departmental administration. The position offers excellent startup funding, access to high-performance computing facilities, and opportunities for field research.",
+                "url": f"{source['url']}/assoc-prof-climate-{uuid.uuid4().hex[:8]}",
                 "location": source["location"],
-                "deadline": "2024-04-30",
-                "category": "Research"
+                "deadline": "2024-05-30",
+                "category": "Teaching"
             },
             {
-                "title": "Lecturer in Data Science",
+                "title": "Assistant Professor in Biomedical Engineering",
                 "university": source["name"],
-                "description": "We invite applications for a permanent Lecturer position in Data Science. The role involves teaching undergraduate and postgraduate courses, developing curriculum, and conducting research. Candidates should have expertise in statistical analysis, programming, and experience in higher education.",
-                "url": f"{source['url']}/lecturer-data-science-{uuid.uuid4().hex[:8]}",
+                "description": "We seek a dynamic Assistant Professor in Biomedical Engineering to join our interdisciplinary research community. The successful candidate should have expertise in medical device development, biomaterials, tissue engineering, or biomedical imaging. A PhD in Biomedical Engineering or related field is required, along with postdoctoral experience and a strong research portfolio. The role includes establishing an independent research program, teaching courses at all levels, mentoring students, and collaborating across departments. Startup package includes laboratory space, equipment funding, and graduate student support.",
+                "url": f"{source['url']}/asst-prof-biomed-{uuid.uuid4().hex[:8]}",
+                "location": source["location"],
+                "deadline": "2024-04-20",
+                "category": "Teaching"
+            },
+            {
+                "title": "Professor of Economics and Public Policy",
+                "university": source["name"],
+                "description": "Distinguished Professor position available in Economics with focus on Public Policy. We are looking for a world-class economist with expertise in policy analysis, development economics, or behavioral economics. The candidate should have an outstanding research record, experience in policy advisory roles, and strong leadership capabilities. Responsibilities include leading research initiatives, securing external funding, supervising doctoral students, and engaging with policymakers. The position offers a prestigious chair, reduced teaching load, substantial research support, and opportunities for international collaboration.",
+                "url": f"{source['url']}/professor-econ-policy-{uuid.uuid4().hex[:8]}",
+                "location": source["location"],
+                "deadline": "2024-07-01",
+                "category": "Teaching"
+            },
+            {
+                "title": "Associate Professor in Data Science and Statistics",
+                "university": source["name"],
+                "description": "Join our expanding Data Science program as an Associate Professor. We seek candidates with expertise in statistical modeling, big data analytics, machine learning applications, or computational statistics. The ideal candidate will have a strong methodological background, experience with real-world data applications, and a commitment to interdisciplinary collaboration. Duties include research, teaching statistical methods and data science courses, supervising graduate students, and contributing to our growing data science initiative. Excellent computational resources and collaborative opportunities available.",
+                "url": f"{source['url']}/assoc-prof-data-science-{uuid.uuid4().hex[:8]}",
                 "location": source["location"],
                 "deadline": "2024-05-15",
                 "category": "Teaching"
             },
             {
-                "title": "PhD Studentship - Biomedical Engineering",
+                "title": "Assistant Professor in Cognitive Psychology",
                 "university": source["name"],
-                "description": "Fully funded PhD studentship in Biomedical Engineering focusing on medical device development. The project involves designing innovative solutions for cardiovascular monitoring. Applicants should have a strong background in engineering, mathematics, or physics.",
-                "url": f"{source['url']}/phd-biomedical-{uuid.uuid4().hex[:8]}",
+                "description": "The Department of Psychology invites applications for an Assistant Professor position in Cognitive Psychology. We are particularly interested in candidates working in areas such as memory, attention, perception, or cognitive neuroscience. The successful applicant will have a PhD in Psychology or related field, strong research skills, and potential for external funding. Responsibilities include conducting research, teaching undergraduate and graduate courses, supervising students, and service to the department. State-of-the-art laboratories, neuroimaging facilities, and collaborative research environment provided.",
+                "url": f"{source['url']}/asst-prof-cog-psych-{uuid.uuid4().hex[:8]}",
                 "location": source["location"],
-                "deadline": "2024-03-31",
-                "category": "PhD"
+                "deadline": "2024-04-30",
+                "category": "Teaching"
             },
             {
-                "title": "Research Technician - Neuroscience Lab",
+                "title": "Professor of Sustainable Engineering",
                 "university": source["name"],
-                "description": "Research Technician position in a leading neuroscience laboratory. Responsibilities include maintaining lab equipment, preparing samples, conducting experiments, and data analysis. Ideal for recent graduates looking to gain research experience before pursuing further studies.",
-                "url": f"{source['url']}/tech-neuroscience-{uuid.uuid4().hex[:8]}",
+                "description": "We are seeking a Professor to lead our Sustainable Engineering research cluster. The ideal candidate will have international recognition in areas such as renewable energy, environmental engineering, or sustainable materials. Strong leadership experience, major grant funding history, and industry partnerships are highly valued. The role involves directing research strategy, building international collaborations, mentoring faculty, and contributing to university sustainability initiatives. Generous startup package, endowed chair consideration, and exceptional research infrastructure available.",
+                "url": f"{source['url']}/professor-sustainable-eng-{uuid.uuid4().hex[:8]}",
                 "location": source["location"],
-                "deadline": "2024-04-20",
-                "category": "Technical"
+                "deadline": "2024-06-30",
+                "category": "Teaching"
+            },
+            {
+                "title": "Associate Professor in Digital Humanities",
+                "university": source["name"],
+                "description": "Applications are invited for an Associate Professor in Digital Humanities, bridging technology and humanities scholarship. We seek candidates with expertise in computational text analysis, digital archives, cultural analytics, or digital pedagogy. The successful candidate will have a strong publication record, experience with digital tools and methods, and vision for innovative humanities research. Responsibilities include research, teaching across disciplines, developing digital humanities curriculum, and building partnerships with cultural institutions. Access to digital laboratories and technical support provided.",
+                "url": f"{source['url']}/assoc-prof-digital-hum-{uuid.uuid4().hex[:8]}",
+                "location": source["location"],
+                "deadline": "2024-05-20",
+                "category": "Teaching"
             }
         ]
         
+        # Create 2-3 jobs per university to reach 50+ total jobs
+        import random
+        selected_jobs = random.sample(professorial_jobs, min(3, len(professorial_jobs)))
+        
         # Add unique IDs and timestamps
-        for job in sample_jobs:
+        for job in selected_jobs:
             job["id"] = str(uuid.uuid4())
             job["date_added"] = datetime.utcnow()
             job["is_active"] = True
             job["summary"] = None  # Will be generated by AI later
         
-        return sample_jobs
+        return selected_jobs
 
     async def scrape_all_sources(self) -> List[Dict]:
         """Scrape jobs from all London sources"""
