@@ -1,0 +1,117 @@
+/* Additional component-specific styles */
+
+.job-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.job-card:hover {
+  transform: translateY(-2px);
+}
+
+.category-badge {
+  transition: all 0.2s ease-in-out;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 0 2px var(--color-ring);
+}
+
+.filter-button.active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive design helpers */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+  
+  .mobile-stack {
+    flex-direction: column;
+  }
+  
+  .mobile-full {
+    width: 100%;
+  }
+}
+
+/* Custom scrollbar for job listings */
+.job-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.job-list-container::-webkit-scrollbar-track {
+  background: var(--color-muted);
+  border-radius: 3px;
+}
+
+.job-list-container::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.job-list-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, select {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Enhanced card hover effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Animation for filter toggles */
+.filter-slide-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.filter-slide-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-out;
+}
+
+.filter-slide-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.filter-slide-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in;
+}
