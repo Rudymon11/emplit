@@ -57,17 +57,20 @@ class JobSource(BaseModel):
 async def root():
     return {"message": "Academic Jobs API for London", "status": "active"}
 
-@app.get("/api/jobs", response_model=List[Job])
+@app.get("/api/jobs", response_model=dict)
 async def get_jobs(
-    location: Optional[str] = Query("London", description="Filter by location"),
+    location: Optional[str] = Query(None, description="Filter by location"),
     category: Optional[str] = Query(None, description="Filter by category"),
     university: Optional[str] = Query(None, description="Filter by university"),
     search: Optional[str] = Query(None, description="Search in title and description"),
-    limit: int = Query(50, description="Number of jobs to return"),
-    skip: int = Query(0, description="Number of jobs to skip")
+    page: int = Query(1, description="Page number (1-based)"),
+    limit: int = Query(10, description="Number of jobs per page"),
 ):
-    """Get jobs with optional filtering"""
+    """Get jobs with optional filtering and pagination"""
     try:
+        # Calculate skip for pagination
+        skip = (page - 1) * limit
+        
         # Build query
         query = {"is_active": True}
         
@@ -87,7 +90,11 @@ async def get_jobs(
                 {"summary": {"$regex": search, "$options": "i"}}
             ]
         
-        # Execute query
+        # Get total count for pagination
+        total_count = await db.jobs.count_documents(query)
+        total_pages = (total_count + limit - 1) // limit
+        
+        # Execute query with pagination
         cursor = db.jobs.find(query).sort("date_added", -1).skip(skip).limit(limit)
         jobs = []
         
@@ -95,7 +102,17 @@ async def get_jobs(
             job["id"] = job.pop("_id")
             jobs.append(Job(**job))
         
-        return jobs
+        return {
+            "jobs": jobs,
+            "pagination": {
+                "current_page": page,
+                "total_pages": total_pages,
+                "total_count": total_count,
+                "has_next": page < total_pages,
+                "has_prev": page > 1,
+                "page_size": limit
+            }
+        }
     except Exception as e:
         logger.error(f"Error fetching jobs: {e}")
         raise HTTPException(status_code=500, detail="Error fetching jobs")
